@@ -1,0 +1,14 @@
+{
+	"name": "telegraf-calendar-telegram",
+	"version": "0.0.1",
+	"scripts": {
+		"start": "pm2 start ./bin/www --name telegraf-calendar-telegram",
+		"restart": "pm2 restart telegraf-calendar-telegram"
+	},
+	"dependencies": {
+		"telegraf": "^3.6.7"
+	},
+	"devDependencies": {
+		"eslint": "^3.19.0"
+	}
+}

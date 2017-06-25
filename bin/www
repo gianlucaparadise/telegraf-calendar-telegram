@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+var bot = require('../bot');
+var http = require('http');
+
+var server = http.createServer(function (req, res) {
+	res.writeHead(200);
+	res.end('Calendar Bot is up');
+});
+server.listen(process.env.CALENDAR_BOT_PORT || '3000');
