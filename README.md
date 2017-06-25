@@ -9,15 +9,15 @@ Using this simple inline calendar you can allow your Telegram bot to ask dates. 
 Usage
 ================
 Import the library:
-```
+```javascript
 const calendar = require('telegraf-calendar-telegram');
 ```
 Retreive the calendar HTML:
-```
+```javascript
 bot.command("calendar", context => context.reply("Here you are", calendar.getCalendar()));
 ```
 Listen for the selected date event:
-```
+```javascript
 calendar.setDateListener(bot, (context, date) => context.reply(date));
 ```
 

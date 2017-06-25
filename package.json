@@ -1,10 +1,28 @@
 {
 	"name": "telegraf-calendar-telegram",
-	"version": "0.0.1",
+	"version": "0.5.0",
+	"description": "Inline calendar for Telegram bots using Telegraf framework",
+	"author": {
+		"name": "gianlucaparadise",
+		"email": "gianlucaparadise@gmail.com",
+		"url": "https://github.com/gianlucaparadise"
+	},
+	"license": "Apache-2.0",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/gianlucaparadise/telegraf-calendar-telegram"
+	},
 	"scripts": {
 		"start": "pm2 start ./bin/www --name telegraf-calendar-telegram",
 		"restart": "pm2 restart telegraf-calendar-telegram"
 	},
+	"keywords": [
+		"telegram",
+		"bot",
+		"telegraf",
+		"calendar"
+	],
 	"dependencies": {
 		"telegraf": "^3.6.7"
 	},
