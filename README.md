@@ -4,21 +4,58 @@ You can test it using this [bot](t.me/CalendarTelegrafBot.).
 
 Description
 ================
-Using this simple inline calendar you can allow your Telegram bot to ask dates. This library is build using [Telegraf](https://github.com/telegraf/telegraf) Framework.
+Using this simple inline calendar you can allow your Telegram bot to ask dates. This library is built using [Telegraf](https://github.com/telegraf/telegraf) Framework.
 
 Usage
 ================
-Import the library:
-```javascript
-const calendar = require('telegraf-calendar-telegram');
+Installation
+---------------
+
 ```
-Retreive the calendar HTML:
+npm i telegraf-calendar-telegram --save
+```
+
+Basic usage
+---------------
 ```javascript
+// create the bot
+const bot = new Telegraf(process.env.CALENDAR_BOT_TOKEN);
+// instantiate the calendar
+const calendar = new Calendar(bot);
+
+// listen for the selected date event
+calendar.setDateListener((context, date) => context.reply(date));
+// retreive the calendar HTML
 bot.command("calendar", context => context.reply("Here you are", calendar.getCalendar()));
 ```
-Listen for the selected date event:
+
+This creates a calendar with the default options: you will have an english calendar with Sunday as starting week day.
+
+Customization
+---------------
+When you instantiate the calendar, you can pass an option object:
+
 ```javascript
-calendar.setDateListener(bot, (context, date) => context.reply(date));
+const calendar = new Calendar(bot, {
+	startWeekDay: 1,
+	weekDayNames: ["L", "M", "M", "G", "V", "S", "D"],
+	monthNames: [
+		"Gen", "Feb", "Mar", "Apr", "Mag", "Giu",
+		"Lug", "Ago", "Set", "Ott", "Nov", "Dic"
+	]
+});
 ```
+
+This creates an italian calendar.
+
+The `options` object has the following properties:
+
+- `startWeekDay`: first day of the week, where 0 is Sunday
+- `weekDayNames`: week day names, where the first element is `startWeekDay` name
+- `monthNames`: month names
+
+
+Example
+-----------
 
 You can find [here](./bot/index.js) the code for a working [bot](t.me/CalendarTelegrafBot.).
