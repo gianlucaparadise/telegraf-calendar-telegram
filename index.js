@@ -9,6 +9,9 @@ class Calendar {
 		this.helper = new CalendarHelper(options);
 	}
 
+	/**
+	 * Return Calendar Markup
+	 */
 	getCalendar() {
 		return this.helper.getCalendarMarkup(new Date());
 	}
@@ -40,6 +43,16 @@ class Calendar {
 		});
 
 		this.bot.action("calendar-telegram-ignore", context => { });
+	}
+
+	setMinDate(date) {
+		this.helper.options.setMinDate(date);
+		return this;
+	}
+
+	setMaxDate(date) {
+		this.helper.options.setMaxDate(date);
+		return this;
 	}
 }
 

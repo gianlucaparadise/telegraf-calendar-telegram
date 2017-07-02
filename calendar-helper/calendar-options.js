@@ -22,15 +22,28 @@ class CalendarOptions {
 		return this.getPropOrDefault("minDate", null);
 	}
 
+	setMinDate(date) {
+		let options = this.getOptions();
+		options.minDate = date;
+	}
+
 	getMaxDate() {
 		return this.getPropOrDefault("maxDate", null);
 	}
 
+	setMaxDate(date) {
+		let options = this.getOptions();
+		options.maxDate = date;
+	}
+
+	getOptions() {
+		if (!this.options) this.options = {};
+		return this.options;
+	}
+
 	getPropOrDefault(propName, defaultValue) {
-		if (this.options && this.options.hasOwnProperty(propName)) {
-			return this.options[propName];
-		}
-		return defaultValue;
+		let options = this.getOptions();
+		return options.hasOwnProperty(propName) ? options[propName] : defaultValue;
 	}
 }
 
