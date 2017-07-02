@@ -1,17 +1,9 @@
+const CalendarOptions = require('./calendar-options');
 const Extra = require('telegraf').Extra;
 
 class CalendarHelper {
 	constructor(options) {
-		this.options = options || {
-			startWeekDay: 0,
-			weekDayNames: ["S", "M", "T", "W", "T", "F", "S"],
-			monthNames: [
-				"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-				"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-			],
-			minDate: null,
-			maxDate: null
-		};
+		this.options = new CalendarOptions(options);
 	}
 
 	getCalendarMarkup(date) {
@@ -21,7 +13,7 @@ class CalendarHelper {
 	}
 
 	addHeader(page, m, date) {
-		let monthName = this.options.monthNames[date.getMonth()];
+		let monthName = this.options.getMonthNames()[date.getMonth()];
 		let year = date.getFullYear();
 
 		let header = [];
@@ -46,7 +38,7 @@ class CalendarHelper {
 
 		page.push(header);
 
-		page.push(this.options.weekDayNames.map(e => m.callbackButton(e, "calendar-telegram-ignore")));
+		page.push(this.options.getWeekDayNames().map(e => m.callbackButton(e, "calendar-telegram-ignore")));
 	}
 
 	addDays(page, m, date) {
@@ -82,7 +74,7 @@ class CalendarHelper {
 	}
 
 	normalizeWeekDay(weekDay) {
-		let result = weekDay - this.options.startWeekDay;
+		let result = weekDay - this.options.getStartWeekDay();
 		if (result < 0) result += 7;
 		return result;
 	}
@@ -97,7 +89,7 @@ class CalendarHelper {
 	getMinDay(date) {
 		let minDay;
 		if (this.isInMinMonth(date)) {
-			minDay = this.options.minDate.getDate();
+			minDay = this.options.getMinDate().getDate();
 		}
 		else {
 			minDay = 1;
@@ -116,7 +108,7 @@ class CalendarHelper {
 	getMaxDay(date) {
 		let maxDay;
 		if (this.isInMaxMonth(date)) {
-			maxDay = this.options.maxDate.getDate();
+			maxDay = this.options.getMaxDate().getDate();
 		}
 		else {
 			maxDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -140,14 +132,14 @@ class CalendarHelper {
 	 * Check if inupt date is in same year and month as min date
 	 */
 	isInMinMonth(date) {
-		return CalendarHelper.isSameMonth(this.options.minDate, date);
+		return CalendarHelper.isSameMonth(this.options.getMinDate(), date);
 	}
 
 	/**
 	 * Check if inupt date is in same year and month as max date
 	 */
 	isInMaxMonth(date) {
-		return CalendarHelper.isSameMonth(this.options.maxDate, date);
+		return CalendarHelper.isSameMonth(this.options.getMaxDate(), date);
 	}
 
 	/**
