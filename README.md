@@ -53,6 +53,8 @@ The `options` object has the following properties:
 - `startWeekDay`: first day of the week, where 0 is Sunday
 - `weekDayNames`: week day names, where the first element is `startWeekDay` name
 - `monthNames`: month names
+- `minDate`: minimum selectable date (there is a setter on Calendar object, too)
+- `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
 
 
 Example
