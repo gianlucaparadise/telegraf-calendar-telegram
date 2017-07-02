@@ -1,7 +1,6 @@
 const CalendarHelper = require('./calendar-helper');
 
 // todo: handle localization
-// todo: handle max day and min day
 
 class Calendar {
 	constructor(bot, options) {
