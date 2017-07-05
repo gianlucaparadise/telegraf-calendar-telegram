@@ -48,6 +48,21 @@ const calendar = new Calendar(bot, {
 
 This creates an italian calendar.
 
+Default options:
+
+```javascript
+{
+	startWeekDay: 0,
+	weekDayNames: ["S", "M", "T", "W", "T", "F", "S"],
+	monthNames: [
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+	],
+	minDate: null,
+	maxDate: null
+}
+```
+
 The `options` object has the following properties:
 
 - `startWeekDay`: first day of the week, where 0 is Sunday

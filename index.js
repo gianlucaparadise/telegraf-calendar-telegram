@@ -46,12 +46,12 @@ class Calendar {
 	}
 
 	setMinDate(date) {
-		this.helper.options.setMinDate(date);
+		this.helper.setMinDate(date);
 		return this;
 	}
 
 	setMaxDate(date) {
-		this.helper.options.setMaxDate(date);
+		this.helper.setMaxDate(date);
 		return this;
 	}
 }
