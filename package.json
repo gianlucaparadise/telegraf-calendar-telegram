@@ -14,8 +14,8 @@
 		"url": "https://github.com/gianlucaparadise/telegraf-calendar-telegram"
 	},
 	"scripts": {
-		"start": "pm2 start ./bin/www --name telegraf-calendar-telegram",
-		"restart": "pm2 restart telegraf-calendar-telegram"
+		"start": "node bin/www",
+		"deploy": "now --public && now alias && now remove telegraf-calendar-telegram --safe -y"
 	},
 	"keywords": [
 		"telegram",
