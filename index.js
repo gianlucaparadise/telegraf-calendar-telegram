@@ -1,7 +1,5 @@
 const CalendarHelper = require('./calendar-helper');
 
-// todo: handle localization
-
 class Calendar {
 	constructor(bot, options) {
 		this.bot = bot
@@ -52,6 +50,21 @@ class Calendar {
 
 	setMaxDate(date) {
 		this.helper.setMaxDate(date);
+		return this;
+	}
+
+	setWeekDayNames(names) {
+		this.helper.setWeekDayNames(names);
+		return this;
+	}
+
+	setMonthNames(names) {
+		this.helper.setMonthNames(names);
+		return this;
+	}
+
+	setStartWeekDay(startDay) {
+		this.helper.setWeekDayNames(startDay);
 		return this;
 	}
 }

@@ -28,6 +28,18 @@ class CalendarHelper {
 		this.options.maxDate = date;
 	}
 
+	setWeekDayNames(names) {
+		this.options.weekDayNames = names;
+	}
+
+	setMonthNames(names) {
+		this.options.monthNames = names;
+	}
+
+	setStartWeekDay(startDay) {
+		this.options.startWeekDay = startDay;
+	}
+
 	addHeader(page, m, date) {
 		let monthName = this.options.monthNames[date.getMonth()];
 		let year = date.getFullYear();
