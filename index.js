@@ -18,7 +18,7 @@ class Calendar {
 		this.bot.action(/calendar-telegram-date-[\d-]+/g, context => {
 			if (onDateSelected) {
 				let date = context.match[0].replace("calendar-telegram-date-", "");
-				onDateSelected(context, date);
+				return onDateSelected(context, date);
 			}
 		});
 
