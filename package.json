@@ -24,7 +24,7 @@
 		"calendar"
 	],
 	"dependencies": {
-		"telegraf": "^3.6.7"
+		"telegraf": "^3.25.0"
 	},
 	"devDependencies": {
 		"eslint": "^3.19.0"

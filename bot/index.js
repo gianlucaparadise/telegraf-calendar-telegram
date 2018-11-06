@@ -24,6 +24,7 @@ bot.command("calendar", context => {
 	minDate.setMonth(today.getMonth() - 2);
 	const maxDate = new Date();
 	maxDate.setMonth(today.getMonth() + 2);
+	maxDate.setDate(today.getDate());
 
 	context.reply("Here you are", calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar())
 });

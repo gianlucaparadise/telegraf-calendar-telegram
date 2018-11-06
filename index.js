@@ -18,7 +18,8 @@ class Calendar {
 		this.bot.action(/calendar-telegram-date-[\d-]+/g, context => {
 			if (onDateSelected) {
 				let date = context.match[0].replace("calendar-telegram-date-", "");
-				return onDateSelected(context, date);
+				return context.answerCbQuery()
+					.then(() => onDateSelected(context, date));
 			}
 		});
 
@@ -28,7 +29,8 @@ class Calendar {
 			date.setMonth(date.getMonth() - 1);
 
 			let prevText = context.callbackQuery.message.text;
-			context.editMessageText(prevText, this.helper.getCalendarMarkup(date));
+			return context.answerCbQuery()
+				.then(() => context.editMessageText(prevText, this.helper.getCalendarMarkup(date)));
 		});
 
 		this.bot.action(/calendar-telegram-next-[\d-]+/g, context => {
@@ -37,10 +39,11 @@ class Calendar {
 			date.setMonth(date.getMonth() + 1);
 
 			let prevText = context.callbackQuery.message.text;
-			context.editMessageText(prevText, this.helper.getCalendarMarkup(date));
+			return context.answerCbQuery()
+				.then(() => context.editMessageText(prevText, this.helper.getCalendarMarkup(date)));
 		});
 
-		this.bot.action("calendar-telegram-ignore", context => { });
+		this.bot.action("calendar-telegram-ignore", context => context.answerCbQuery());
 	}
 
 	setMinDate(date) {
