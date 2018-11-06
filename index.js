@@ -43,7 +43,7 @@ class Calendar {
 				.then(() => context.editMessageText(prevText, this.helper.getCalendarMarkup(date)));
 		});
 
-		this.bot.action("calendar-telegram-ignore", context => context.answerCbQuery());
+		this.bot.action(/calendar-telegram-ignore-[\d\w-]+/g, context => context.answerCbQuery());
 	}
 
 	setMinDate(date) {

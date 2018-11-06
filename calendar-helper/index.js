@@ -48,17 +48,17 @@ class CalendarHelper {
 
 		if (this.isInMinMonth(date)) {
 			// this is min month, I push an empty button
-			header.push(m.callbackButton(" ", "calendar-telegram-ignore"));
+			header.push(m.callbackButton(" ", "calendar-telegram-ignore-minmonth"));
 		}
 		else {
 			header.push(m.callbackButton("<", "calendar-telegram-prev-" + CalendarHelper.toYyyymmdd(date)));
 		}
 
-		header.push(m.callbackButton(monthName + " " + year, "calendar-telegram-ignore"));
+		header.push(m.callbackButton(monthName + " " + year, "calendar-telegram-ignore-monthname"));
 
 		if (this.isInMaxMonth(date)) {
 			// this is max month, I push an empty button
-			header.push(m.callbackButton(" ", "calendar-telegram-ignore"));
+			header.push(m.callbackButton(" ", "calendar-telegram-ignore-maxmonth"));
 		}
 		else {
 			header.push(m.callbackButton(">", "calendar-telegram-next-" + CalendarHelper.toYyyymmdd(date)));
@@ -66,7 +66,7 @@ class CalendarHelper {
 
 		page.push(header);
 
-		page.push(this.options.weekDayNames.map(e => m.callbackButton(e, "calendar-telegram-ignore")));
+		page.push(this.options.weekDayNames.map((e, i) => m.callbackButton(e, "calendar-telegram-ignore-weekday" + i)));
 	}
 
 	addDays(page, m, date) {
@@ -74,22 +74,23 @@ class CalendarHelper {
 		let maxDay = this.getMaxDay(date);
 		let minDay = this.getMinDay(date);
 
-		let currentRow = new Array(7).fill(m.callbackButton(" ", "calendar-telegram-ignore"));
+		let currentRow = CalendarHelper.buildFillerRow(m, "firstRow-");
 		for (var d = 1; d <= maxMonthDay; d++) {
 			date.setDate(d);
 
 			let weekDay = this.normalizeWeekDay(date.getDay());
 			//currentRow[weekDay] = CalendarHelper.toYyyymmdd(date);
 			if (d < minDay || d > maxDay) {
-				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore");
+				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
 			}
 			else {
 				currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
 			}
 
 			if (weekDay == 6 || d == maxMonthDay) {
+				// I'm at the end of the row: I create a new filler row
 				page.push(currentRow);
-				currentRow = new Array(7).fill(m.callbackButton(" ", "calendar-telegram-ignore"));
+				currentRow = CalendarHelper.buildFillerRow(m, "lastRow-");
 			}
 		}
 	}
@@ -194,6 +195,16 @@ class CalendarHelper {
 		return text.split('').reduce(function (acc, char) {
 			return acc + char + '\u0336';
 		}, '');
+	}
+
+	/**
+	 * Builds an array of seven ignored callback buttons
+	 * @param {*object} m Telegraf Markup object
+	 * @param {*String} prefix String to be added before the element index
+	 */
+	static buildFillerRow(m, prefix) {
+		let buttonKey = "calendar-telegram-ignore-filler-" + prefix;
+		return Array.from({ length: 7 }, (v, k) => m.callbackButton(" ", buttonKey + k));
 	}
 }
 
