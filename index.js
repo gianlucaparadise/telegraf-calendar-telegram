@@ -47,12 +47,12 @@ class Calendar {
 	}
 
 	setMinDate(date) {
-		this.helper.setMinDate(date);
+		this.helper.setMinDate(new Date(date));
 		return this;
 	}
 
 	setMaxDate(date) {
-		this.helper.setMaxDate(date);
+		this.helper.setMaxDate(new Date(date));
 		return this;
 	}
 
@@ -67,7 +67,7 @@ class Calendar {
 	}
 
 	setStartWeekDay(startDay) {
-		this.helper.setWeekDayNames(startDay);
+		this.helper.setStartWeekDay(startDay);
 		return this;
 	}
 }
