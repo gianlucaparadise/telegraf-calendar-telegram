@@ -29,4 +29,8 @@ bot.command("calendar", context => {
 	context.reply("Here you are", calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar())
 });
 
+bot.catch((err) => {
+	console.log("Error in bot:", err);
+});
+
 bot.startPolling();

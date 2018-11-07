@@ -21,10 +21,16 @@ class CalendarHelper {
 	}
 
 	setMinDate(date) {
+		if (this.options.maxDate && date > this.options.maxDate) {
+			throw "Min date can't be greater than max date";
+		}
 		this.options.minDate = date;
 	}
 
 	setMaxDate(date) {
+		if (this.options.minDate && date < this.options.minDate) {
+			throw "Max date can't be lower than min date";
+		}
 		this.options.maxDate = date;
 	}
 
@@ -95,7 +101,11 @@ class CalendarHelper {
 		}
 	}
 
-	getPage(m, date) {
+	getPage(m, inputDate) {
+		// I use a math clamp to check if the input date is in range
+		let dateNumber = Math.min(Math.max(inputDate, this.options.minDate), this.options.maxDate);
+		let date = new Date(dateNumber);
+
 		let page = [];
 		this.addHeader(page, m, date);
 		this.addDays(page, m, date);
