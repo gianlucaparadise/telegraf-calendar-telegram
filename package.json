@@ -1,6 +1,6 @@
 {
 	"name": "telegraf-calendar-telegram",
-	"version": "1.5.7",
+	"version": "1.5.8",
 	"description": "Inline calendar for Telegram bots using Telegraf framework",
 	"author": {
 		"name": "gianlucaparadise",
@@ -16,6 +16,9 @@
 	"scripts": {
 		"start": "node bin/www",
 		"deploy": "now --public && now alias && now remove telegraf-calendar-telegram --safe -y"
+	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com/@gianlucaparadise"
 	},
 	"keywords": [
 		"telegram",
