@@ -10,8 +10,10 @@ class Calendar {
 	/**
 	 * Return Calendar Markup
 	 */
-	getCalendar() {
-		return this.helper.getCalendarMarkup(new Date());
+	getCalendar(date) {
+		if (!date) date = new Date();
+
+		return this.helper.getCalendarMarkup(date);
 	}
 
 	setDateListener(onDateSelected) {
