@@ -110,8 +110,8 @@ class CalendarHelper {
 		}
 
 		let page = [];
-		this.addHeader(page, m, inputDate);
-		this.addDays(page, m, inputDate);
+		this.addHeader(page, m, date);
+		this.addDays(page, m, date);
 		return page;
 	}
 
