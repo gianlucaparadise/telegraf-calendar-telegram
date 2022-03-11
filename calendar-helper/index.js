@@ -103,11 +103,7 @@ class CalendarHelper {
 
 	getPage(m, inputDate) {
 		let dateNumber = this.options.minDate !== null || this.options.maxDate !== null ? Math.min(Math.max(inputDate, this.options.minDate), this.options.maxDate) : null;
-		let date = inputDate 
-		
-		if(dateNumber) {
-			date = new Date(dateNumber);
-		}
+		let date = dateNumber ? new Date(dateNumber) : inputDate;
 
 		let page = [];
 		this.addHeader(page, m, date);
