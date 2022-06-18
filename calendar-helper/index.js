@@ -10,7 +10,8 @@ class CalendarHelper {
 				"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 			],
 			minDate: null,
-			maxDate: null
+			maxDate: null,
+			hideIgnoredWeeks: false
 		}, options);
 	}
 
@@ -44,6 +45,10 @@ class CalendarHelper {
 
 	setStartWeekDay(startDay) {
 		this.options.startWeekDay = startDay;
+	}
+
+	setHideIgnoredWeeks(hideIgnoredWeeks) {
+		this.options.hideIgnoredWeeks = hideIgnoredWeeks;
 	}
 
 	addHeader(page, m, date) {
@@ -80,6 +85,9 @@ class CalendarHelper {
 		let maxDay = this.getMaxDay(date);
 		let minDay = this.getMinDay(date);
 
+		let daysOfWeekProcessed = 0,
+			daysOfWeekIgnored = 0;
+
 		let currentRow = CalendarHelper.buildFillerRow(m, "firstRow-");
 		for (var d = 1; d <= maxMonthDay; d++) {
 			date.setDate(d);
@@ -88,15 +96,31 @@ class CalendarHelper {
 			//currentRow[weekDay] = CalendarHelper.toYyyymmdd(date);
 			if (d < minDay || d > maxDay) {
 				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+
+				daysOfWeekIgnored++;
 			}
 			else {
 				currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
 			}
 
+			daysOfWeekProcessed++;
+
 			if (weekDay == 6 || d == maxMonthDay) {
+				if (this.options.hideIgnoredWeeks) {
+					if (daysOfWeekProcessed === daysOfWeekIgnored) {
+						// just skip current row
+					} else {
+						page.push(currentRow);
+					}
+				} else {
+					page.push(currentRow);
+				}
+
 				// I'm at the end of the row: I create a new filler row
-				page.push(currentRow);
 				currentRow = CalendarHelper.buildFillerRow(m, "lastRow-");
+
+				daysOfWeekProcessed = 0;
+				daysOfWeekIgnored = 0;
 			}
 		}
 	}

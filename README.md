@@ -61,7 +61,8 @@ Default options:
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	],
 	minDate: null,
-	maxDate: null
+	maxDate: null,
+	hideIgnoredWeeks: false
 }
 ```
 
@@ -72,6 +73,7 @@ The `options` object has the following properties:
 - `monthNames`: month names
 - `minDate`: minimum selectable date (there is a setter on Calendar object, too)
 - `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
+- `hideIgnoredWeeks`: hide a week if all days of a week can't be selected
 
 
 Example
