@@ -168,14 +168,14 @@ let dateNumber = this.options.minDate || this.options.maxDate ? Math.min(Math.ma
 	}
 
 	/**
-	 * Check if inupt date is in same year and month as min date
+	 * Check if input date is in same year and month as min date
 	 */
 	isInMinMonth(date) {
 		return CalendarHelper.isSameMonth(this.options.minDate, date);
 	}
 
 	/**
-	 * Check if inupt date is in same year and month as max date
+	 * Check if input date is in same year and month as max date
 	 */
 	isInMaxMonth(date) {
 		return CalendarHelper.isSameMonth(this.options.maxDate, date);
