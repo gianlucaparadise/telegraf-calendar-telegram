@@ -102,8 +102,8 @@ class CalendarHelper {
 	}
 
 	getPage(m, inputDate) {
-// I use a math clamp to check if the input date is in range
-let dateNumber = this.options.minDate || this.options.maxDate ? Math.min(Math.max(inputDate, this.options.minDate), this.options.maxDate) : null;
+		// I use a math clamp to check if the input date is in range
+		let dateNumber = this.options.minDate || this.options.maxDate ? Math.min(Math.max(inputDate, this.options.minDate), this.options.maxDate) : null;
 		let date = dateNumber ? new Date(dateNumber) : inputDate;
 
 		let page = [];
