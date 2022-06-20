@@ -62,7 +62,9 @@ Default options:
 	],
 	minDate: null,
 	maxDate: null,
-	ignoreWeekDays: []
+	ignoreWeekDays: [],
+	hideIgnoredWeeks: false,
+	shortcutButtons: []
 }
 ```
 
@@ -74,6 +76,8 @@ The `options` object has the following properties:
 - `minDate`: minimum selectable date (there is a setter on Calendar object, too)
 - `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
 - `ignoreWeekDays`: numbers of week days that can't be selected by user (5 - saturday, 6 - sunday)
+- `hideIgnoredWeeks`: hide a week if all days of a week can't be selected
+- `shortcutButtons`: list of additional buttons data, which will be displayed at the top of calendar (example: [{"label": "Today", "differenceCurrentDate": 0}])
 
 
 Example

@@ -11,7 +11,9 @@ class CalendarHelper {
 			],
 			minDate: null,
 			maxDate: null,
-			ignoreWeekDays: []
+			ignoreWeekDays: [],
+			hideIgnoredWeeks: false,
+			shortcutButtons: []
 		}, options);
 	}
 
@@ -49,6 +51,34 @@ class CalendarHelper {
 
 	setIgnoreWeekDays(ignoreWeekDays) {
 		this.options.ignoreWeekDays = ignoreWeekDays;
+  }
+
+	setHideIgnoredWeeks(hideIgnoredWeeks) {
+		this.options.hideIgnoredWeeks = hideIgnoredWeeks;
+	}
+
+	setShortcutButtons(shortcutButtons) {
+		this.options.shortcutButtons = shortcutButtons;
+	}
+
+	addShortcutButtons(page, m) {
+		let menuShortcutButtons = [];
+
+		let currentDate = new Date();
+
+		for (let shortcutButton of this.options.shortcutButtons) {
+			let differenceCurrentDate = shortcutButton.differenceCurrentDate;
+
+			let date = new Date(currentDate);
+			date.setDate(date.getDate() + differenceCurrentDate);
+
+			let buttonLabel = shortcutButton.label,
+				buttonCallbackData = "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date);
+
+			menuShortcutButtons.push(m.callbackButton(buttonLabel, buttonCallbackData));
+		}
+
+		page.push(menuShortcutButtons);
 	}
 
 	addHeader(page, m, date) {
@@ -85,6 +115,9 @@ class CalendarHelper {
 		let maxDay = this.getMaxDay(date);
 		let minDay = this.getMinDay(date);
 
+		let daysOfWeekProcessed = 0,
+			daysOfWeekIgnored = 0;
+
 		let currentRow = CalendarHelper.buildFillerRow(m, "firstRow-");
 		for (var d = 1; d <= maxMonthDay; d++) {
 			date.setDate(d);
@@ -93,6 +126,8 @@ class CalendarHelper {
 			//currentRow[weekDay] = CalendarHelper.toYyyymmdd(date);
 			if (d < minDay || d > maxDay) {
 				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+
+				daysOfWeekIgnored++;
 			}
 			else {
 				if (this.options.ignoreWeekDays.includes(weekDay)) {
@@ -103,10 +138,24 @@ class CalendarHelper {
 				}
 			}
 
+			daysOfWeekProcessed++;
+
 			if (weekDay == 6 || d == maxMonthDay) {
+				if (this.options.hideIgnoredWeeks) {
+					if (daysOfWeekProcessed === daysOfWeekIgnored) {
+						// just skip current row
+					} else {
+						page.push(currentRow);
+					}
+				} else {
+					page.push(currentRow);
+				}
+
 				// I'm at the end of the row: I create a new filler row
-				page.push(currentRow);
 				currentRow = CalendarHelper.buildFillerRow(m, "lastRow-");
+
+				daysOfWeekProcessed = 0;
+				daysOfWeekIgnored = 0;
 			}
 		}
 	}
@@ -117,8 +166,13 @@ class CalendarHelper {
 		let date = dateNumber ? new Date(dateNumber) : inputDate;
 
 		let page = [];
+
+		if (this.options.shortcutButtons.length > 0) {
+			this.addShortcutButtons(page, m);
+		}
 		this.addHeader(page, m, date);
 		this.addDays(page, m, date);
+
 		return page;
 	}
 
