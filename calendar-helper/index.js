@@ -11,7 +11,8 @@ class CalendarHelper {
 			],
 			minDate: null,
 			maxDate: null,
-			hideIgnoredWeeks: false
+			hideIgnoredWeeks: false,
+			shortcutButtons: []
 		}, options);
 	}
 
@@ -49,6 +50,30 @@ class CalendarHelper {
 
 	setHideIgnoredWeeks(hideIgnoredWeeks) {
 		this.options.hideIgnoredWeeks = hideIgnoredWeeks;
+	}
+
+	setShortcutButtons(shortcutButtons) {
+		this.options.shortcutButtons = shortcutButtons;
+	}
+
+	addShortcutButtons(page, m) {
+		let menuShortcutButtons = [];
+
+		let currentDate = new Date();
+
+		for (let shortcutButton of this.options.shortcutButtons) {
+			let differenceCurrentDate = shortcutButton.differenceCurrentDate;
+
+			let date = new Date(currentDate);
+			date.setDate(date.getDate() + differenceCurrentDate);
+
+			let buttonLabel = shortcutButton.label,
+				buttonCallbackData = "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date);
+
+			menuShortcutButtons.push(m.callbackButton(buttonLabel, buttonCallbackData));
+		}
+
+		page.push(menuShortcutButtons);
 	}
 
 	addHeader(page, m, date) {
@@ -126,13 +151,18 @@ class CalendarHelper {
 	}
 
 	getPage(m, inputDate) {
-// I use a math clamp to check if the input date is in range
-let dateNumber = this.options.minDate || this.options.maxDate ? Math.min(Math.max(inputDate, this.options.minDate), this.options.maxDate) : null;
+		// I use a math clamp to check if the input date is in range
+		let dateNumber = this.options.minDate || this.options.maxDate ? Math.min(Math.max(inputDate, this.options.minDate), this.options.maxDate) : null;
 		let date = dateNumber ? new Date(dateNumber) : inputDate;
 
 		let page = [];
+
+		if (this.options.shortcutButtons.length > 0) {
+			this.addShortcutButtons(page, m);
+		}
 		this.addHeader(page, m, date);
 		this.addDays(page, m, date);
+
 		return page;
 	}
 
@@ -192,14 +222,14 @@ let dateNumber = this.options.minDate || this.options.maxDate ? Math.min(Math.ma
 	}
 
 	/**
-	 * Check if inupt date is in same year and month as min date
+	 * Check if input date is in same year and month as min date
 	 */
 	isInMinMonth(date) {
 		return CalendarHelper.isSameMonth(this.options.minDate, date);
 	}
 
 	/**
-	 * Check if inupt date is in same year and month as max date
+	 * Check if input date is in same year and month as max date
 	 */
 	isInMaxMonth(date) {
 		return CalendarHelper.isSameMonth(this.options.maxDate, date);
