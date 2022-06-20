@@ -51,7 +51,7 @@ class CalendarHelper {
 
 	setIgnoreWeekDays(ignoreWeekDays) {
 		this.options.ignoreWeekDays = ignoreWeekDays;
-  }
+	}
 
 	setHideIgnoredWeeks(hideIgnoredWeeks) {
 		this.options.hideIgnoredWeeks = hideIgnoredWeeks;
