@@ -61,7 +61,8 @@ Default options:
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	],
 	minDate: null,
-	maxDate: null
+	maxDate: null,
+	ignoreWeekDays: []
 }
 ```
 
@@ -72,6 +73,7 @@ The `options` object has the following properties:
 - `monthNames`: month names
 - `minDate`: minimum selectable date (there is a setter on Calendar object, too)
 - `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
+- `ignoreWeekDays`: numbers of week days that can't be selected by user (5 - saturday, 6 - sunday)
 
 
 Example

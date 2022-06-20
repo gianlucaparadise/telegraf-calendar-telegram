@@ -10,7 +10,8 @@ class CalendarHelper {
 				"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 			],
 			minDate: null,
-			maxDate: null
+			maxDate: null,
+			ignoreWeekDays: []
 		}, options);
 	}
 
@@ -44,6 +45,10 @@ class CalendarHelper {
 
 	setStartWeekDay(startDay) {
 		this.options.startWeekDay = startDay;
+	}
+
+	setIgnoreWeekDays(ignoreWeekDays) {
+		this.options.ignoreWeekDays = ignoreWeekDays;
 	}
 
 	addHeader(page, m, date) {
@@ -90,7 +95,12 @@ class CalendarHelper {
 				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
 			}
 			else {
-				currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
+				if (this.options.ignoreWeekDays.includes(weekDay)) {
+					currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+				}
+				else {
+					currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
+				}
 			}
 
 			if (weekDay == 6 || d == maxMonthDay) {
