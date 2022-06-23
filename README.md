@@ -61,7 +61,8 @@ Default options:
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	],
 	minDate: null,
-	maxDate: null
+	maxDate: null,
+	shortcutButtons: []
 }
 ```
 
@@ -72,6 +73,7 @@ The `options` object has the following properties:
 - `monthNames`: month names
 - `minDate`: minimum selectable date (there is a setter on Calendar object, too)
 - `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
+- `shortcutButtons`: list of additional buttons data, which will be displayed at the top of calendar. You can add a button with: `shortcutButtons: [{"label": "Today", "action": "ping"}]` and you can handle it with `bot.action("ping", context => context.reply("pong"))`
 
 
 Example
