@@ -57,15 +57,10 @@ class CalendarHelper {
 		let currentDate = new Date();
 
 		for (let shortcutButton of this.options.shortcutButtons) {
-			let differenceCurrentDate = shortcutButton.differenceCurrentDate;
+			let buttonLabel = shortcutButton.label;
+			let buttonAction = shortcutButton.action;
 
-			let date = new Date(currentDate);
-			date.setDate(date.getDate() + differenceCurrentDate);
-
-			let buttonLabel = shortcutButton.label,
-				buttonCallbackData = "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date);
-
-			menuShortcutButtons.push(m.callbackButton(buttonLabel, buttonCallbackData));
+			menuShortcutButtons.push(m.callbackButton(buttonLabel, buttonAction));
 		}
 
 		page.push(menuShortcutButtons);
@@ -133,7 +128,8 @@ class CalendarHelper {
 
 		let page = [];
 
-		if (this.options.shortcutButtons.length > 0) {
+		const shortcutButtons = this.options.shortcutButtons
+		if (shortcutButtons && shortcutButtons.length > 0) {
 			this.addShortcutButtons(page, m);
 		}
 		this.addHeader(page, m, date);
