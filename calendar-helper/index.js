@@ -11,6 +11,7 @@ class CalendarHelper {
 			],
 			minDate: null,
 			maxDate: null,
+			ignoreWeekDays: [],
 			shortcutButtons: []
 		}, options);
 	}
@@ -47,6 +48,10 @@ class CalendarHelper {
 		this.options.startWeekDay = startDay;
 	}
 
+	setIgnoreWeekDays(ignoreWeekDays) {
+		this.options.ignoreWeekDays = ignoreWeekDays;
+  }
+  
 	setShortcutButtons(shortcutButtons) {
 		this.options.shortcutButtons = shortcutButtons;
 	}
@@ -107,6 +112,9 @@ class CalendarHelper {
 			let weekDay = this.normalizeWeekDay(date.getDay());
 			//currentRow[weekDay] = CalendarHelper.toYyyymmdd(date);
 			if (d < minDay || d > maxDay) {
+				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+			}
+			else if (this.options.ignoreWeekDays.includes(weekDay)) {
 				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
 			}
 			else {
