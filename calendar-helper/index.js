@@ -94,13 +94,11 @@ class CalendarHelper {
 			if (d < minDay || d > maxDay) {
 				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
 			}
+			else if (this.options.ignoreWeekDays.includes(weekDay)) {
+				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+			}
 			else {
-				if (this.options.ignoreWeekDays.includes(weekDay)) {
-					currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
-				}
-				else {
-					currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
-				}
+				currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
 			}
 
 			if (weekDay == 6 || d == maxMonthDay) {
