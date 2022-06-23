@@ -11,7 +11,8 @@ class CalendarHelper {
 			],
 			minDate: null,
 			maxDate: null,
-			ignoreWeekDays: []
+			ignoreWeekDays: [],
+			shortcutButtons: []
 		}, options);
 	}
 
@@ -49,6 +50,25 @@ class CalendarHelper {
 
 	setIgnoreWeekDays(ignoreWeekDays) {
 		this.options.ignoreWeekDays = ignoreWeekDays;
+  }
+  
+	setShortcutButtons(shortcutButtons) {
+		this.options.shortcutButtons = shortcutButtons;
+	}
+
+	addShortcutButtons(page, m) {
+		let menuShortcutButtons = [];
+
+		let currentDate = new Date();
+
+		for (let shortcutButton of this.options.shortcutButtons) {
+			let buttonLabel = shortcutButton.label;
+			let buttonAction = shortcutButton.action;
+
+			menuShortcutButtons.push(m.callbackButton(buttonLabel, buttonAction));
+		}
+
+		page.push(menuShortcutButtons);
 	}
 
 	addHeader(page, m, date) {
@@ -115,8 +135,14 @@ class CalendarHelper {
 		let date = dateNumber ? new Date(dateNumber) : inputDate;
 
 		let page = [];
+
+		const shortcutButtons = this.options.shortcutButtons;
+		if (shortcutButtons && shortcutButtons.length > 0) {
+			this.addShortcutButtons(page, m);
+		}
 		this.addHeader(page, m, date);
 		this.addDays(page, m, date);
+
 		return page;
 	}
 
