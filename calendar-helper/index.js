@@ -128,7 +128,7 @@ class CalendarHelper {
 
 		let page = [];
 
-		const shortcutButtons = this.options.shortcutButtons
+		const shortcutButtons = this.options.shortcutButtons;
 		if (shortcutButtons && shortcutButtons.length > 0) {
 			this.addShortcutButtons(page, m);
 		}
