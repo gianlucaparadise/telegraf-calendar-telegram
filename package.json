@@ -26,6 +26,7 @@
 		"telegraf": "^3.25.0"
 	},
 	"devDependencies": {
+		"dotenv": "^16.0.1",
 		"eslint": "^8.11.0"
 	}
 }

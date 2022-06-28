@@ -92,3 +92,11 @@ You can find [here](./bot/index.js) the code for a simple bot that can run local
 ## Webhooks
 
 You can check [this](https://github.com/gianlucaparadise/telegraf-calendar-telegram-bot/blob/main/src/bot-setup.js) repository for a bot that is using webhooks and is deployed on Vercel. You can contact [@CalendarTelegrafBot](https://t.me/CalendarTelegrafBot) to test this bot.
+
+Local testing
+-----------
+* Create a Telegram bot using [BotFather](https://core.telegram.org/bots#6-botfather) to get an API token
+* Clone this repository
+* Run `yarn`
+* Run `cp .env.example .env` to create the env file
+* Edit the _.env_ file and set the API token of your bot to `CALENDAR_BOT_TOKEN`
