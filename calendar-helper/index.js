@@ -12,7 +12,8 @@ class CalendarHelper {
 			minDate: null,
 			maxDate: null,
 			ignoreWeekDays: [],
-			shortcutButtons: []
+			shortcutButtons: [],
+			hideIgnoredWeeks: false
 		}, options);
 	}
 
@@ -54,6 +55,10 @@ class CalendarHelper {
   
 	setShortcutButtons(shortcutButtons) {
 		this.options.shortcutButtons = shortcutButtons;
+	}
+
+	setHideIgnoredWeeks(hideIgnoredWeeks) {
+		this.options.hideIgnoredWeeks = hideIgnoredWeeks;
 	}
 
 	addShortcutButtons(page, m) {
@@ -105,6 +110,9 @@ class CalendarHelper {
 		let maxDay = this.getMaxDay(date);
 		let minDay = this.getMinDay(date);
 
+		let daysOfWeekProcessed = 0,
+			daysOfWeekIgnored = 0;
+
 		let currentRow = CalendarHelper.buildFillerRow(m, "firstRow-");
 		for (var d = 1; d <= maxMonthDay; d++) {
 			date.setDate(d);
@@ -112,19 +120,32 @@ class CalendarHelper {
 			let weekDay = this.normalizeWeekDay(date.getDay());
 			//currentRow[weekDay] = CalendarHelper.toYyyymmdd(date);
 			if (d < minDay || d > maxDay) {
-				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+				if (!this.options.hideIgnoredWeeks) {
+					currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+				}
+
+				daysOfWeekIgnored++;
 			}
 			else if (this.options.ignoreWeekDays.includes(weekDay)) {
 				currentRow[weekDay] = m.callbackButton(CalendarHelper.strikethroughText(d.toString()), "calendar-telegram-ignore-" + CalendarHelper.toYyyymmdd(date));
+
+				daysOfWeekIgnored++;
 			}
 			else {
 				currentRow[weekDay] = m.callbackButton(d.toString(), "calendar-telegram-date-" + CalendarHelper.toYyyymmdd(date));
 			}
 
+			daysOfWeekProcessed++;
+
 			if (weekDay == 6 || d == maxMonthDay) {
+				if (!this.options.hideIgnoredWeeks || daysOfWeekProcessed !== daysOfWeekIgnored) {
+					page.push(currentRow);
+				}
 				// I'm at the end of the row: I create a new filler row
-				page.push(currentRow);
 				currentRow = CalendarHelper.buildFillerRow(m, "lastRow-");
+
+				daysOfWeekProcessed = 0;
+				daysOfWeekIgnored = 0;
 			}
 		}
 	}
