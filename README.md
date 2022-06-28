@@ -1,6 +1,6 @@
 # telegraf-calendar-telegram
 Inline calendar for Telegram bots using Telegraf framework.
-You can test it using this [bot](t.me/CalendarTelegrafBot.).
+You can contact [@CalendarTelegrafBot](https://t.me/CalendarTelegrafBot) to test the calendar.
 
 Description
 ================
@@ -15,6 +15,10 @@ Installation
 
 ```
 npm i telegraf-calendar-telegram --save
+```
+or
+```
+yarn add telegraf-calendar-telegram
 ```
 
 Basic usage
@@ -81,4 +85,10 @@ The `options` object has the following properties:
 Example
 -----------
 
-You can find [here](./bot/index.js) the code for a working [bot](t.me/CalendarTelegrafBot.).
+## Polling
+
+You can find [here](./bot/index.js) the code for a simple bot that can run locally using polling.
+
+## Webhooks
+
+You can check [this](https://github.com/gianlucaparadise/telegraf-calendar-telegram-bot/blob/main/src/bot-setup.js) repository for a bot that is using webhooks and is deployed on Vercel. You can contact [@CalendarTelegrafBot](https://t.me/CalendarTelegrafBot) to test this bot.
