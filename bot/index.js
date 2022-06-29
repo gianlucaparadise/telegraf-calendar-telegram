@@ -1,8 +1,9 @@
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 
-const Calendar = require('../');
+import Calendar from '../index.js';
 
-const Telegraf = require('telegraf');
+import Telegraf from 'telegraf';
 // create the bot
 const bot = new Telegraf(process.env.CALENDAR_BOT_TOKEN);
 
@@ -36,3 +37,5 @@ bot.catch((err) => {
 });
 
 bot.startPolling();
+
+export default bot

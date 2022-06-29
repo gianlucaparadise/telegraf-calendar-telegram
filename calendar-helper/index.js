@@ -1,6 +1,7 @@
-const Extra = require('telegraf').Extra;
+import Telegraf from 'telegraf';
+const { Extra } = Telegraf
 
-class CalendarHelper {
+export default class CalendarHelper {
 	constructor(options) {
 		this.options = Object.assign({
 			startWeekDay: 0,
@@ -272,5 +273,3 @@ class CalendarHelper {
 		return Array.from({ length: 7 }, (v, k) => m.callbackButton(" ", buttonKey + k));
 	}
 }
-
-module.exports = CalendarHelper;
