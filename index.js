@@ -42,10 +42,17 @@ class Calendar {
       date.setMonth(date.getMonth() - 1);
 
       let prevText = context.callbackQuery.message.text;
+      
+      let prevEntities = context.callbackQuery.message.entities;
+      let extras = { 
+        ...this.helper.getCalendarMarkup(date),
+        entities: prevEntities
+      };
+      
       return context
         .answerCbQuery()
         .then(() =>
-          context.editMessageText(prevText, this.helper.getCalendarMarkup(date))
+          context.editMessageText(prevText, extras)
         );
     });
 
@@ -55,10 +62,17 @@ class Calendar {
       date.setMonth(date.getMonth() + 1);
 
       let prevText = context.callbackQuery.message.text;
+      
+      let prevEntities = context.callbackQuery.message.entities;
+      let extras = { 
+        ...this.helper.getCalendarMarkup(date),
+        entities: prevEntities
+      };
+      
       return context
         .answerCbQuery()
         .then(() =>
-          context.editMessageText(prevText, this.helper.getCalendarMarkup(date))
+          context.editMessageText(prevText, extras)
         );
     });
 
