@@ -1,7 +1,6 @@
-import Telegraf from 'telegraf';
-const { Markup } = Telegraf;
+const { Markup } = require('telegraf');
 
-export default class CalendarHelper {
+class CalendarHelper {
   constructor(options) {
     this.options = Object.assign(
       {
@@ -322,3 +321,5 @@ export default class CalendarHelper {
     );
   }
 }
+
+module.exports = CalendarHelper;

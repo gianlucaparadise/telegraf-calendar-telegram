@@ -1,6 +1,6 @@
-import CalendarHelper from './calendar-helper/index.js';
+const CalendarHelper = require('./calendar-helper');
 
-export default class Calendar {
+class Calendar {
   /**
    * Construct the calendar
    * @param {Telegraf} bot Telegraf bot instance
@@ -112,3 +112,5 @@ export default class Calendar {
     return this;
   }
 }
+
+module.exports = Calendar;
