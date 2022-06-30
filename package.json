@@ -1,33 +1,33 @@
 {
-	"name": "telegraf-calendar-telegram",
-	"version": "1.6.0",
-	"description": "Inline calendar for Telegram bots using Telegraf framework",
-	"author": {
-		"name": "gianlucaparadise",
-		"email": "gianlucaparadise@gmail.com",
-		"url": "https://github.com/gianlucaparadise"
-	},
-	"license": "Apache-2.0",
-	"main": "index.js",
-	"type": "module",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/gianlucaparadise/telegraf-calendar-telegram"
-	},
-	"scripts": {
-		"start": "node bin/www"
-	},
-	"keywords": [
-		"telegram",
-		"bot",
-		"telegraf",
-		"calendar"
-	],
-	"dependencies": {
-		"telegraf": "^4.8.5"
-	},
-	"devDependencies": {
-		"dotenv": "^16.0.1",
-		"eslint": "^8.11.0"
-	}
+  "name": "telegraf-calendar-telegram",
+  "version": "2.0.0",
+  "description": "Inline calendar for Telegram bots using Telegraf framework",
+  "author": {
+    "name": "gianlucaparadise",
+    "email": "gianlucaparadise@gmail.com",
+    "url": "https://github.com/gianlucaparadise"
+  },
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gianlucaparadise/telegraf-calendar-telegram"
+  },
+  "scripts": {
+    "start": "node bin/www"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "telegraf",
+    "calendar"
+  ],
+  "dependencies": {
+    "telegraf": "^4.8.5"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "eslint": "^8.11.0"
+  }
 }
