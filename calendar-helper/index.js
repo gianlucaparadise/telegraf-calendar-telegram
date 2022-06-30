@@ -1,5 +1,5 @@
 import Telegraf from 'telegraf';
-const { Extra } = Telegraf;
+const { Markup } = Telegraf;
 
 export default class CalendarHelper {
   constructor(options) {
@@ -32,9 +32,7 @@ export default class CalendarHelper {
   }
 
   getCalendarMarkup(date) {
-    return Extra.HTML().markup((m) => {
-      return m.inlineKeyboard(this.getPage(m, date));
-    });
+    return Markup.inlineKeyboard(this.getPage(date));
   }
 
   setMinDate(date) {
@@ -75,20 +73,22 @@ export default class CalendarHelper {
     this.options.hideIgnoredWeeks = hideIgnoredWeeks;
   }
 
-  addShortcutButtons(page, m) {
+  addShortcutButtons(page) {
     let menuShortcutButtons = [];
 
     for (let shortcutButton of this.options.shortcutButtons) {
       let buttonLabel = shortcutButton.label;
       let buttonAction = shortcutButton.action;
 
-      menuShortcutButtons.push(m.callbackButton(buttonLabel, buttonAction));
+      menuShortcutButtons.push(
+        Markup.button.callback(buttonLabel, buttonAction)
+      );
     }
 
     page.push(menuShortcutButtons);
   }
 
-  addHeader(page, m, date) {
+  addHeader(page, date) {
     let monthName = this.options.monthNames[date.getMonth()];
     let year = date.getFullYear();
 
@@ -96,10 +96,12 @@ export default class CalendarHelper {
 
     if (this.isInMinMonth(date)) {
       // this is min month, I push an empty button
-      header.push(m.callbackButton(' ', 'calendar-telegram-ignore-minmonth'));
+      header.push(
+        Markup.button.callback(' ', 'calendar-telegram-ignore-minmonth')
+      );
     } else {
       header.push(
-        m.callbackButton(
+        Markup.button.callback(
           '<',
           'calendar-telegram-prev-' + CalendarHelper.toYyyymmdd(date)
         )
@@ -107,7 +109,7 @@ export default class CalendarHelper {
     }
 
     header.push(
-      m.callbackButton(
+      Markup.button.callback(
         monthName + ' ' + year,
         'calendar-telegram-ignore-monthname'
       )
@@ -115,10 +117,12 @@ export default class CalendarHelper {
 
     if (this.isInMaxMonth(date)) {
       // this is max month, I push an empty button
-      header.push(m.callbackButton(' ', 'calendar-telegram-ignore-maxmonth'));
+      header.push(
+        Markup.button.callback(' ', 'calendar-telegram-ignore-maxmonth')
+      );
     } else {
       header.push(
-        m.callbackButton(
+        Markup.button.callback(
           '>',
           'calendar-telegram-next-' + CalendarHelper.toYyyymmdd(date)
         )
@@ -129,12 +133,12 @@ export default class CalendarHelper {
 
     page.push(
       this.options.weekDayNames.map((e, i) =>
-        m.callbackButton(e, 'calendar-telegram-ignore-weekday' + i)
+        Markup.button.callback(e, 'calendar-telegram-ignore-weekday' + i)
       )
     );
   }
 
-  addDays(page, m, date) {
+  addDays(page, date) {
     let maxMonthDay = new Date(
       date.getFullYear(),
       date.getMonth() + 1,
@@ -146,7 +150,7 @@ export default class CalendarHelper {
     let daysOfWeekProcessed = 0,
       daysOfWeekIgnored = 0;
 
-    let currentRow = CalendarHelper.buildFillerRow(m, 'firstRow-');
+    let currentRow = CalendarHelper.buildFillerRow('firstRow-');
     for (var d = 1; d <= maxMonthDay; d++) {
       date.setDate(d);
 
@@ -154,7 +158,7 @@ export default class CalendarHelper {
       //currentRow[weekDay] = CalendarHelper.toYyyymmdd(date);
       if (d < minDay || d > maxDay) {
         if (!this.options.hideIgnoredWeeks) {
-          currentRow[weekDay] = m.callbackButton(
+          currentRow[weekDay] = Markup.button.callback(
             CalendarHelper.strikethroughText(d.toString()),
             'calendar-telegram-ignore-' + CalendarHelper.toYyyymmdd(date)
           );
@@ -162,14 +166,14 @@ export default class CalendarHelper {
 
         daysOfWeekIgnored++;
       } else if (this.options.ignoreWeekDays.includes(weekDay)) {
-        currentRow[weekDay] = m.callbackButton(
+        currentRow[weekDay] = Markup.button.callback(
           CalendarHelper.strikethroughText(d.toString()),
           'calendar-telegram-ignore-' + CalendarHelper.toYyyymmdd(date)
         );
 
         daysOfWeekIgnored++;
       } else {
-        currentRow[weekDay] = m.callbackButton(
+        currentRow[weekDay] = Markup.button.callback(
           d.toString(),
           'calendar-telegram-date-' + CalendarHelper.toYyyymmdd(date)
         );
@@ -185,7 +189,7 @@ export default class CalendarHelper {
           page.push(currentRow);
         }
         // I'm at the end of the row: I create a new filler row
-        currentRow = CalendarHelper.buildFillerRow(m, 'lastRow-');
+        currentRow = CalendarHelper.buildFillerRow('lastRow-');
 
         daysOfWeekProcessed = 0;
         daysOfWeekIgnored = 0;
@@ -193,7 +197,7 @@ export default class CalendarHelper {
     }
   }
 
-  getPage(m, inputDate) {
+  getPage(inputDate) {
     // I use a math clamp to check if the input date is in range
     let dateNumber =
       this.options.minDate || this.options.maxDate
@@ -208,10 +212,10 @@ export default class CalendarHelper {
 
     const shortcutButtons = this.options.shortcutButtons;
     if (shortcutButtons && shortcutButtons.length > 0) {
-      this.addShortcutButtons(page, m);
+      this.addShortcutButtons(page);
     }
-    this.addHeader(page, m, date);
-    this.addDays(page, m, date);
+    this.addHeader(page, date);
+    this.addDays(page, date);
 
     return page;
   }
@@ -311,10 +315,10 @@ export default class CalendarHelper {
    * @param {*object} m Telegraf Markup object
    * @param {*String} prefix String to be added before the element index
    */
-  static buildFillerRow(m, prefix) {
+  static buildFillerRow(prefix) {
     let buttonKey = 'calendar-telegram-ignore-filler-' + prefix;
     return Array.from({ length: 7 }, (v, k) =>
-      m.callbackButton(' ', buttonKey + k)
+      Markup.button.callback(' ', buttonKey + k)
     );
   }
 }

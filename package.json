@@ -24,7 +24,7 @@
 		"calendar"
 	],
 	"dependencies": {
-		"telegraf": "^3.25.0"
+		"telegraf": "^4.8.5"
 	},
 	"devDependencies": {
 		"dotenv": "^16.0.1",

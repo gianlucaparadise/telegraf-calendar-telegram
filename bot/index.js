@@ -3,7 +3,7 @@ dotenv.config();
 
 import Calendar from '../index.js';
 
-import Telegraf from 'telegraf';
+import { Telegraf } from 'telegraf';
 // create the bot
 const bot = new Telegraf(process.env.CALENDAR_BOT_TOKEN);
 
