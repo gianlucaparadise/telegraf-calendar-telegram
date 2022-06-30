@@ -31,7 +31,7 @@ class Calendar {
       if (onDateSelected) {
         let date = context.match[0].replace('calendar-telegram-date-', '');
         return context
-          .answerCbQuery()
+          .answerCbQuery(`✅ ${new Date(date).toLocaleDateString("en-UK", { day:"numeric", month: "short" })} selected`)
           .then(() => onDateSelected(context, date));
       }
     });
