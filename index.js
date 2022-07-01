@@ -42,18 +42,16 @@ class Calendar {
       date.setMonth(date.getMonth() - 1);
 
       let prevText = context.callbackQuery.message.text;
-      
+
       let prevEntities = context.callbackQuery.message.entities;
-      let extras = { 
+      let extras = {
         ...this.helper.getCalendarMarkup(date),
-        entities: prevEntities
+        entities: prevEntities,
       };
-      
+
       return context
         .answerCbQuery()
-        .then(() =>
-          context.editMessageText(prevText, extras)
-        );
+        .then(() => context.editMessageText(prevText, extras));
     });
 
     this.bot.action(/calendar-telegram-next-[\d-]+/g, (context) => {
@@ -62,18 +60,16 @@ class Calendar {
       date.setMonth(date.getMonth() + 1);
 
       let prevText = context.callbackQuery.message.text;
-      
+
       let prevEntities = context.callbackQuery.message.entities;
-      let extras = { 
+      let extras = {
         ...this.helper.getCalendarMarkup(date),
-        entities: prevEntities
+        entities: prevEntities,
       };
-      
+
       return context
         .answerCbQuery()
-        .then(() =>
-          context.editMessageText(prevText, extras)
-        );
+        .then(() => context.editMessageText(prevText, extras));
     });
 
     this.bot.action(/calendar-telegram-ignore-[\d\w-]+/g, (context) =>

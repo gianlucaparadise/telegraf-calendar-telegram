@@ -1,6 +1,6 @@
 {
   "name": "telegraf-calendar-telegram",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Inline calendar for Telegram bots using Telegraf framework",
   "author": {
     "name": "gianlucaparadise",
