@@ -17,5 +17,13 @@
     "no-unused-vars": "warn",
     "constructor-super": "warn",
     "valid-typeof": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.js"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }
