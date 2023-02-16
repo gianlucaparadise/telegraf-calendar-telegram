@@ -27,7 +27,7 @@ class Calendar {
    * @param {(context: Context, date: Date) => void} onDateSelected The callback to be used
    */
   setDateListener(onDateSelected) {
-    this.bot.action(/calendar-telegram-date-[\d-]+/g, (context) => {
+    this.bot.action(/calendar-telegram-date-.+/g, (context) => {
       if (onDateSelected) {
         let date = context.match[0].replace('calendar-telegram-date-', '');
         return context

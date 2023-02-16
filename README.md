@@ -80,8 +80,12 @@ The `options` object has the following properties:
 - `minDate`: minimum selectable date (there is a setter on Calendar object, too)
 - `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
 - `ignoreWeekDays`: numbers of week days that can't be selected by user (5 - saturday, 6 - sunday)
-- `shortcutButtons`: list of additional buttons data, which will be displayed at the top of calendar. You can add a button with: `shortcutButtons: [{"label": "Today", "action": "ping"}]` and you can handle it with `bot.action("ping", context => context.reply("pong"))`
 - `hideIgnoredWeeks`: hide a week if all days of a week can't be selected
+- `shortcutButtons`: object for additional configuration.
+  -  `buttons`: additional buttons data, which will be displayed at the top of calendar. You can either add an array of buttons or an array of arrays of buttons: `shortcutButtons: [{"label": "Today", "action": "ping"}]` or `shortcutButtons: [[{"label": "Today", "action": "ping"}], [{"label": "Tomorrow", "action": "pang"}]]`. You can handle each callback by linking it to an action handler, like this: `bot.action("ping", context => context.reply("pong"))`
+  - `placement`: placement of shortcut buttons (either `"top"` or `"bottom"`, defaults to `"top"`)
+  - `shouldPrefixButtonCallbacks`: determines whether or not prefix each shortcut button callback action with internal prefix. This is useful, if you want to create buttons like `"Today"` or `"Tomorrow"`, because the provided handler for `setDateListener` will pick up on the date selection. Defaults to false.
+  - `callbackSuffix`: custom string that you can use to suffix each date select with. **Note**, you should carefully handle your `setDateListener` handler, because the incoming parameter will be ONLY PREFIXED with a date. For example, it may look like: `"2023-01-26_your_custom_string"`. This can be an especially useful option, if you want to handle callbacks for specific entities, (for instance, `"2023-01-26?recordId=2"`)
 
 
 Example

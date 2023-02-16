@@ -23,7 +23,12 @@ class CalendarHelper {
         minDate: null,
         maxDate: null,
         ignoreWeekDays: [],
-        shortcutButtons: [],
+        shortcutButtons: {
+          buttons: [],
+          placement: 'top',
+          callbackSuffix: '',
+          shouldPrefixButtonCallbacks: false,
+        },
         hideIgnoredWeeks: false,
       },
       options
@@ -64,27 +69,50 @@ class CalendarHelper {
     this.options.ignoreWeekDays = ignoreWeekDays;
   }
 
-  setShortcutButtons(shortcutButtons) {
-    this.options.shortcutButtons = shortcutButtons;
+  setShortcutButtons(buttons) {
+    this.options.shortcutButtons.buttons = buttons;
   }
 
   setHideIgnoredWeeks(hideIgnoredWeeks) {
     this.options.hideIgnoredWeeks = hideIgnoredWeeks;
   }
 
-  addShortcutButtons(page) {
-    let menuShortcutButtons = [];
+  transformShortcutButtonCallbackAction(buttonAction) {
+    const prefix = this.options.shortcutButtons.shouldPrefixButtonCallbacks
+      ? 'calendar-telegram-date-'
+      : '';
+    return `${prefix}${buttonAction}${this.options.shortcutButtons.callbackSuffix}`;
+  }
 
-    for (let shortcutButton of this.options.shortcutButtons) {
+  addShortcutButtons(page, shortcutButtons, placeAtBottom) {
+    const menuShortcutButtons = [];
+
+    for (let shortcutButton of shortcutButtons) {
       let buttonLabel = shortcutButton.label;
       let buttonAction = shortcutButton.action;
 
       menuShortcutButtons.push(
-        Markup.button.callback(buttonLabel, buttonAction)
+        Markup.button.callback(
+          buttonLabel,
+          this.transformShortcutButtonCallbackAction(buttonAction)
+        )
       );
     }
 
-    page.push(menuShortcutButtons);
+    page[placeAtBottom ? 'push' : 'unshift'](menuShortcutButtons);
+  }
+
+  handleAddShortcutButtons(page) {
+    const buttons = this.options.shortcutButtons.buttons;
+    const placeAtBottom = this.options.shortcutButtons.placement === 'bottom';
+
+    if (buttons.every((shortcut) => Array.isArray(shortcut))) {
+      (placeAtBottom ? buttons : buttons.reverse()).forEach((buttons) => {
+        this.addShortcutButtons(page, buttons, placeAtBottom);
+      });
+    } else {
+      this.addShortcutButtons(page, buttons, placeAtBottom);
+    }
   }
 
   addHeader(page, date) {
@@ -172,9 +200,15 @@ class CalendarHelper {
 
         daysOfWeekIgnored++;
       } else {
+        const prefix = this.options.shortcutButtons.shouldPrefixButtonCallbacks
+          ? 'calendar-telegram-date-'
+          : '';
+
         currentRow[weekDay] = Markup.button.callback(
           d.toString(),
-          'calendar-telegram-date-' + CalendarHelper.toYyyymmdd(date)
+          prefix +
+            CalendarHelper.toYyyymmdd(date) +
+            this.options.shortcutButtons.callbackSuffix
         );
       }
 
@@ -209,12 +243,13 @@ class CalendarHelper {
 
     let page = [];
 
-    const shortcutButtons = this.options.shortcutButtons;
-    if (shortcutButtons && shortcutButtons.length > 0) {
-      this.addShortcutButtons(page);
-    }
     this.addHeader(page, date);
     this.addDays(page, date);
+
+    const shortcutButtons = this.options.shortcutButtons.buttons;
+    if (shortcutButtons && shortcutButtons.length > 0) {
+      this.handleAddShortcutButtons(page);
+    }
 
     return page;
   }
