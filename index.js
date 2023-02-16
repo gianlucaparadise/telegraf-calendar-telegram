@@ -55,7 +55,9 @@ class Calendar {
     });
 
     this.bot.action(/calendar-telegram-next-[\d-]+/g, (context) => {
-      let dateString = context.match[0].replace('calendar-telegram-next-', '');
+      let dateString = context.match[0]
+        .replace('calendar-telegram-next-', '')
+        .replace(/-\d+$/, '-01');
 
       let date = new Date(dateString);
       date.setMonth(date.getMonth() + 1);
