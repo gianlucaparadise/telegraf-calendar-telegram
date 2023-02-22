@@ -79,7 +79,7 @@ The `options` object has the following properties:
 - `monthNames`: month names
 - `minDate`: minimum selectable date (there is a setter on Calendar object, too)
 - `maxDate`: maximum selectable date (there is a setter on Calendar object, too)
-- `ignoreWeekDays`: numbers of week days that can't be selected by user (5 - saturday, 6 - sunday)
+- `ignoreWeekDays`: numbers of week days that can't be selected by user (E.g. when `startWeekDay` is 1, 5 means saturday and 6 means sunday)
 - `shortcutButtons`: list of additional buttons data, which will be displayed at the top of calendar. You can add a button with: `shortcutButtons: [{"label": "Today", "action": "ping"}]` and you can handle it with `bot.action("ping", context => context.reply("pong"))`
 - `hideIgnoredWeeks`: hide a week if all days of a week can't be selected
 

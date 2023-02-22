@@ -1,5 +1,20 @@
 const CalendarHelper = require('.');
 
+jest.mock('telegraf', () => ({
+  Markup: {
+    button: {
+      callback: (text, callback_data) => ({ text, callback_data }),
+    },
+  },
+}));
+
+const isFillerButton = (btn, prefixAndIndex) => {
+  return (
+    btn.text === ' ' &&
+    btn.callback_data === `calendar-telegram-ignore-filler-${prefixAndIndex}`
+  );
+};
+
 describe('Calendar Helper', () => {
   describe('constructor and setters tests', () => {
     it('should parse basic options correctly', () => {
@@ -57,6 +72,205 @@ describe('Calendar Helper', () => {
 
       const invalidMaxDate = new Date('2020-01-12');
       expect(() => helper.setMaxDate(invalidMaxDate)).toThrow();
+    });
+  });
+
+  describe('builders tests', () => {
+    it('should add shortcut buttons to on top of the page', () => {
+      const options = {
+        shortcutButtons: [{ label: 'Today', action: 'ping' }],
+      };
+      const helper = new CalendarHelper(options);
+
+      const page = [];
+      helper.addShortcutButtons(page);
+
+      expect(page).toHaveLength(1);
+
+      const firstRow = page[0];
+      expect(firstRow).toHaveLength(1);
+
+      {
+        const firstShortcutButton = firstRow[0];
+        expect(firstShortcutButton.text).toBe('Today');
+        expect(firstShortcutButton.callback_data).toBe('ping');
+      }
+    });
+
+    it('should build filler row', () => {
+      const fillerRow = CalendarHelper.buildFillerRow('prefix-');
+      expect(fillerRow).toHaveLength(7);
+
+      {
+        const secondDay = fillerRow[1];
+        expect(isFillerButton(secondDay, 'prefix-1')).toBe(true);
+      }
+    });
+
+    it('should build header with two navigators', () => {
+      const headerOptions = {
+        startWeekDay: 1,
+        weekDayNames: ['L', 'M', 'M', 'G', 'V', 'S', 'D'],
+        monthNames: [
+          'Gen',
+          'Feb',
+          'Mar',
+          'Apr',
+          'Mag',
+          'Giu',
+          'Lug',
+          'Ago',
+          'Set',
+          'Ott',
+          'Nov',
+          'Dic',
+        ],
+      };
+      const helper = new CalendarHelper(headerOptions);
+      const page = [];
+      const date = new Date('2023-01-01');
+
+      helper.addHeader(page, date);
+
+      expect(page).toHaveLength(2);
+
+      {
+        const firstRow = page[0]; // Month name row, with navigators
+        expect(firstRow).toHaveLength(3);
+        expect(firstRow[0].text).toBe('<');
+        expect(firstRow[0].callback_data).toBe(
+          'calendar-telegram-prev-2023-01-01'
+        );
+        expect(firstRow[1].text).toBe('Gen 2023');
+        expect(firstRow[1].callback_data).toBe(
+          'calendar-telegram-ignore-monthname'
+        );
+        expect(firstRow[2].text).toBe('>');
+        expect(firstRow[2].callback_data).toBe(
+          'calendar-telegram-next-2023-01-01'
+        );
+      }
+
+      {
+        const secondRow = page[1]; // Weekday names row
+        expect(secondRow).toHaveLength(7);
+        expect(secondRow[2].text).toBe('M');
+        expect(secondRow[2].callback_data).toBe(
+          'calendar-telegram-ignore-weekday2'
+        );
+      }
+    });
+
+    it('should build header on min and max month', () => {
+      const minMaxMonthOptions = {
+        minDate: new Date('2023-02-06'),
+        maxDate: new Date('2023-02-27'),
+      };
+      const helper = new CalendarHelper(minMaxMonthOptions);
+      const page = [];
+      const date = new Date('2023-02-20');
+
+      helper.addHeader(page, date);
+
+      expect(page).toHaveLength(2);
+
+      {
+        const firstRow = page[0]; // Month name row, with navigators
+        expect(firstRow).toHaveLength(3);
+        expect(firstRow[0].text).toBe(' ');
+        expect(firstRow[0].callback_data).toBe(
+          'calendar-telegram-ignore-minmonth'
+        );
+        expect(firstRow[1].text).toBe('Feb 2023');
+        expect(firstRow[1].callback_data).toBe(
+          'calendar-telegram-ignore-monthname'
+        );
+        expect(firstRow[2].text).toBe(' ');
+        expect(firstRow[2].callback_data).toBe(
+          'calendar-telegram-ignore-maxmonth'
+        );
+      }
+    });
+
+    it('should build days page', () => {
+      const minMaxMonthOptions = {
+        ignoreWeekDays: [0],
+        minDate: new Date('2023-02-05'),
+        maxDate: new Date('2023-02-25'),
+      };
+      const helper = new CalendarHelper(minMaxMonthOptions);
+      const page = [];
+      const date = new Date('2023-02-20');
+
+      helper.addDays(page, date);
+
+      expect(page).toHaveLength(5);
+
+      // February 2023 starts on wednesday and ends on tuesday
+      // And in helper options startWeekDay is Monday
+      {
+        const firstRow = page[0];
+        expect(firstRow).toHaveLength(7);
+        expect(isFillerButton(firstRow[0], 'firstRow-0')).toBe(true);
+        expect(firstRow[6].callback_data).toBe(
+          'calendar-telegram-ignore-2023-02-04'
+        );
+      }
+      {
+        const secondRow = page[1];
+        expect(secondRow).toHaveLength(7);
+        // Sundays are ignored because ignoreWeekDays is 0
+        expect(secondRow[0].callback_data).toBe(
+          'calendar-telegram-ignore-2023-02-05'
+        );
+        expect(secondRow[1].text).toBe('6');
+        expect(secondRow[1].callback_data).toBe(
+          'calendar-telegram-date-2023-02-06'
+        );
+      }
+      {
+        const lastRow = page[4];
+        expect(lastRow).toHaveLength(7);
+        expect(lastRow[0].callback_data).toBe(
+          'calendar-telegram-ignore-2023-02-26'
+        );
+        expect(isFillerButton(lastRow[6], 'lastRow-6')).toBe(true);
+      }
+    });
+
+    it('should build a page', () => {
+      // TODO
+      const options = {
+        minDate: new Date('2023-02-02'),
+        maxDate: new Date('2023-03-14'),
+        shortcutButtons: [{ label: 'Today', action: 'ping' }],
+      };
+      const helper = new CalendarHelper(options);
+      const inputDate = new Date('2023-02-20');
+
+      const page = helper.getPage(inputDate);
+
+      // 1 row for shortcut buttons + 2 rows for header + 5 rows for days
+      expect(page).toHaveLength(8);
+
+      {
+        // Checking shortcut buttons row
+        const firstRow = page[0];
+        expect(firstRow).toHaveLength(1);
+        expect(firstRow[0].text).toBe('Today');
+      }
+      {
+        // Checking header rows
+        const secondRow = page[1];
+        expect(secondRow).toHaveLength(3);
+        expect(secondRow[1].text).toBe('Feb 2023');
+      }
+      {
+        // Checking days rows
+        const lastRow = page[7];
+        expect(lastRow).toHaveLength(7);
+        expect(lastRow[0].text).toBe('26');
+      }
     });
   });
 
